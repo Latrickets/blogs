@@ -26,7 +26,15 @@ class TagController extends Controller
      */
     public function create()
     {
-        return view('admin.tags.create');
+        $colors = [
+            'red' => 'Color rojo',
+            'yellow' =>'Color amarillo',
+            'green' => 'Color azul',
+            'indigo' => 'Color indigo',
+            'purple' => 'Color morado',
+            'pink' => 'Color rosa'
+        ];
+        return view('admin.tags.create', compact('colors'));
     }
 
     /**
@@ -37,7 +45,13 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required|unique:tags',
+            'color' => 'required'
+        ]);
+        $tag = Tag::create($request->all());
+        return redirect()->route('admin.tags.edit', compact('tag'))->with('info', 'La etiqueta se creo con exito');
     }
 
     /**
@@ -59,7 +73,15 @@ class TagController extends Controller
      */
     public function edit(Tag $tag)
     {
-        return view('admin.tags.edit', compact('tag'));
+        $colors = [
+            'red' => 'Color rojo',
+            'yellow' =>'Color amarillo',
+            'green' => 'Color azul',
+            'indigo' => 'Color indigo',
+            'purple' => 'Color morado',
+            'pink' => 'Color rosa'
+        ];
+        return view('admin.tags.edit', compact('tag', 'colors'));
     }
 
     /**
@@ -71,7 +93,15 @@ class TagController extends Controller
      */
     public function update(Request $request, Tag $tag)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'slug' => "required|unique:tags,slug,$tag->id",
+            'color' => 'required'
+        ]);
+        $tag->update($request->all());
+
+        return redirect()->route('admin.tags.edit', $tag)->with('info', 'La etiqueta se actualizo con exito');
+
     }
 
     /**
@@ -82,6 +112,7 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        //
+        $tag->delete();
+        return redirect()->route('admin.tags.index')->with('info', 'La etiqueta se elimino con exito');
     }
 }
