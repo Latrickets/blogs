@@ -3,7 +3,7 @@
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach ($posts as $post)
-                <article class="w-full h-80 bg-cover bg-center @if($loop->first) md:col-span-2 @endif" style="background-image: url({{Storage::url($post->image->url)}})">
+                <article class="w-full h-80 bg-cover bg-center @if($loop->first) md:col-span-2 @endif" style="background-image: url(@if($post->image){{Storage::url($post->image->url)}} @else https://cdn.pixabay.com/photo/2022/04/29/17/48/lofoten-7164179__480.jpg @endif)">
                     {{-- <img src="{{Storage::url($post->image->url)}}" alt=""> --}}
                     <div class="w-full h-full px-8 flex flex-col justify-center">
                         <div class="">
